@@ -1,22 +1,11 @@
 import { useEffect, useState } from 'react';
+import { formatNumber } from '../utils/numberUtils';
+import {formatNumberWithSeparator} from '../utils/numberUtils'
 import type { Novel } from '../Models/Novel';
 import NovelService from '../services/NovelService';
 import { FaRegEye } from "react-icons/fa";
 import { LiaLayerGroupSolid } from "react-icons/lia";
 
-const formatNumber = (num: number): string => {
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-    }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    }
-    return num.toString();
-};
-
-const formatNumberWithSeparator = (num: number): string => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
 
 export const NovelCard = () => {
     const [novels, setNovels] = useState<Novel[]>([]);
