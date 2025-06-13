@@ -1,14 +1,14 @@
 
-import Navbar from "../../components/Navbar";
 // import { NovelCard } from "../../components/NovelCard";
-import NovelDetail from "./NovelDetail";
+// import NovelDetail from "./NovelDetail";
+import ChapterContent from "./ChapterContet";
+
 const Home = () => {
     return (
         <div className="main-layout h-auto w-max-screen">
-            <Navbar />
             <div className="home pt-[80px]">
                 {/* <NovelCard /> */}
-                <NovelDetail />
+                <ChapterContent/>
             </div>
         </div>
     );
