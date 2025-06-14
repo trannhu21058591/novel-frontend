@@ -63,14 +63,14 @@ const ChapterNavbar = () => {
                 
                 {/* Actions */}
                 <div className="flex items-center gap-6 px-6">
-                    <button className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                    <button className="hover:cursor-pointer flex items-center gap-1 text-gray-600 hover:text-blue-600">
                         <Bookmark className="w-5 h-5" />
-                        <span>Bookmark</span>
+                        <span>Lưu</span>
                     </button>
                     
-                    <button className="flex items-center gap-1 text-gray-600 hover:text-yellow-500 transition-colors duration-200">
+                    <button className="hover:cursor-pointer flex items-center gap-1 text-gray-600 hover:text-yellow-500">
                         <Star className="w-5 h-5" />
-                        <span>Vote</span>
+                        <span>Bình chọn</span>
                     </button>
                 </div>
             </div>
