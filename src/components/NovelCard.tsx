@@ -5,6 +5,7 @@ import type { Novel } from '../Models/Novel';
 import NovelService from '../services/NovelService';
 import { FaRegEye } from "react-icons/fa";
 import { LiaLayerGroupSolid } from "react-icons/lia";
+import { Link } from 'react-router-dom';
 
 
 export const NovelCard = () => {
@@ -53,9 +54,10 @@ export const NovelCard = () => {
         <div className="novel-card p-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mx-auto w-fit">
                 {novels.map((novel) => (
-                    <div
+                    <Link
                         key={novel.id}
-                        className="h-[250px] w-[160px] flex flex-col items-center pb-2.5 rounded-lg hover:cursor-pointer bg-gray-100"
+                        to={`/novel/${novel.id}`}
+                        className="h-[250px] w-[160px] flex flex-col items-center pb-2.5 rounded-lg hover:cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
                     >
                         <img
                             src={novel.coverImageBase64 || '/images/no-image.png'}
@@ -85,7 +87,7 @@ export const NovelCard = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

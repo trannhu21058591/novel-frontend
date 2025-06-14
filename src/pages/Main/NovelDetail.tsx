@@ -1,13 +1,15 @@
 import "../../App.css";
 import {formatNumberWithSeparator, formatNumber} from "../../utils/numberUtils";
 import { BookOpen, Star, List, Eye, Plus } from "lucide-react"; // Sử dụng icon đẹp
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const NovelDetail = () => {
+  const { id } = useParams();
+
   return (
     <div className="novel-detail w-full py-2 bg-white">
       {/* Wrapper nội dung căng giữa, có độ rộng tối đa */}
-      <div className="w-full flex gap-6 items-center justify-center pb-6 border-b border-gray-200 shadow-sm">
+      <div className="w-full flex gap-6 items-center justify-center pb-6 pt-[80px] border-b border-gray-200 shadow-sm">
         {/* Ảnh truyện */}
         <div className="w-[190px] h-[270px] rounded-lg overflow-hidden border border-gray-200">
           <img
@@ -136,22 +138,31 @@ const NovelDetail = () => {
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
                     <ul className="divide-y divide-gray-200">
                         <li className="hover:bg-gray-50 transition-colors duration-150">
-                            <Link to="/chapter" className="flex items-center justify-between px-4 py-3">
+                            <Link 
+                                to={`/novel/${id}/chapter/1`} 
+                                className="flex items-center justify-between px-4 py-3"
+                            >
                                 <span className="text-gray-900 font-medium">Chương 1. Khởi đầu</span>
                                 <span className="text-sm text-gray-500">20/03/2024</span>
                             </Link> 
                         </li>
                         <li className="hover:bg-gray-50 transition-colors duration-150">
-                            <a href="#" className="flex items-center justify-between px-4 py-3">
+                            <Link 
+                                to={`/novel/${id}/chapter/2`} 
+                                className="flex items-center justify-between px-4 py-3"
+                            >
                                 <span className="text-gray-900 font-medium">Chương 2. Những bí mật</span>
                                 <span className="text-sm text-gray-500">19/03/2024</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="hover:bg-gray-50 transition-colors duration-150">
-                            <a href="#" className="flex items-center justify-between px-4 py-3">
+                            <Link 
+                                to={`/novel/${id}/chapter/3`} 
+                                className="flex items-center justify-between px-4 py-3"
+                            >
                                 <span className="text-gray-900 font-medium">Chương 3. Cuộc gặp gỡ định mệnh</span>
                                 <span className="text-sm text-gray-500">18/03/2024</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
