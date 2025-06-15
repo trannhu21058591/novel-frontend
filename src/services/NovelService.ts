@@ -57,4 +57,12 @@ export default class NovelService {
             throw new Error('Failed to fetch novels: Unknown error');
         }
     }
+
+    static async getNovelById(id: string): Promise<Novel> {
+        const response = await fetch(`${API_URL}/novels/${id}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch novel');
+        }
+        return response.json();
+    }
 } 
