@@ -4,6 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 import Home from '../pages/Main/Home';
 import NovelDetail from '../pages/Main/NovelDetail';
 import ChapterContent from '../pages/Main/ChapterContet';
+import MyProfile from '../pages/Main/MyProfile';
 
 const AppRoutes = () => {
     return (
@@ -12,6 +13,7 @@ const AppRoutes = () => {
                 <Route index element={<Home />} />
                 <Route path="novel/:id" element={<NovelDetail />} />
                 <Route path="novel/:novelId/chapter/:chapterId" element={<ChapterContent />} />
+                <Route path="my-profile" element={<MyProfile />} />
             </Route>
         </Routes>
     );
