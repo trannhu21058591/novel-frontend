@@ -59,11 +59,13 @@ export const NovelCard = () => {
                         to={`/novel/${novel.id}`}
                         className="h-[250px] w-[160px] flex flex-col items-center pb-2.5 rounded-lg hover:cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
                     >
-                        <img
-                            src={novel.coverImageBase64 || '/images/no-image.png'}
-                            alt={novel.title}
-                            className="novel-cover h-[200px] w-full object-cover rounded-t-md"
-                        />
+                        <div className="h-[200px] w-full overflow-hidden rounded-t-md">
+                            <img
+                                src={novel.coverImageBase64 || '/images/no-image.png'}
+                                alt={novel.title}
+                                className="h-full w-full object-cover"
+                            />
+                        </div>
                         <div className="novel-details mt-2 text-center w-[140px] flex flex-col gap-1.5">
                             <h2 className="font-semibold text-sm line-clamp-1 text-center">{novel.title}</h2>
                             <div className='flex flex-row items-center justify-between mt-1'>
