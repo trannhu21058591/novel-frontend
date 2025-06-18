@@ -1,4 +1,5 @@
 import type { Novel } from '../Models/Novel';
+import type { ChapterContent } from '../Models/ChapterContent';
 
 // Using the full URL since we're getting 404 from the proxy
 const API_URL = 'http://localhost:8080/api';
@@ -64,5 +65,30 @@ export default class NovelService {
             throw new Error('Failed to fetch novel');
         }
         return response.json();
+    }
+
+    static async getChapterContent(novelId: string, chapterId: string): Promise<ChapterContent> {
+        try {
+            const response = await fetch(`${API_URL}/novels/${novelId}/chapters/${chapterId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error(
+                    errorData?.message || 
+                    `Failed to fetch chapter content: ${response.status}`
+                );
+            }
+
+            return response.json();
+        } catch (error) {
+            console.error('Error fetching chapter content:', error);
+            throw error;
+        }
     }
 } 

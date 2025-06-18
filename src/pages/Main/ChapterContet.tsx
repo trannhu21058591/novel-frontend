@@ -2,16 +2,9 @@ import ChapterNavbar from "../../components/ChapterNavbar";
 import { Eye, Star, MessageSquare, X, SendHorizontal} from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-
-interface Comment {
-  id: number;
-  user: {
-    name: string;
-    avatar: string;
-  };
-  content: string;
-  timestamp: string;
-}
+import NovelService from "../../services/NovelService";
+import type { ChapterContent } from "../../Models/ChapterContent";
+import type { ChapterParagraph } from "../../Models/ChapterParagraph";
 
 const styles = `
   @keyframes fadeIn {
@@ -37,6 +30,28 @@ const ChapterContent = () => {
   const { novelId, chapterId } = useParams();
   const [activeCommentId, setActiveCommentId] = useState<number | null>(null);
   const [commentText, setCommentText] = useState("");
+  const [chapterData, setChapterData] = useState<ChapterContent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchChapterContent = async () => {
+      if (!novelId || !chapterId) return;
+      
+      try {
+        setLoading(true);
+        const data = await NovelService.getChapterContent(novelId, chapterId);
+        setChapterData(data);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load chapter content');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChapterContent();
+  }, [novelId, chapterId]);
 
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -56,123 +71,11 @@ const ChapterContent = () => {
       top: 0,
       behavior: 'smooth'
     });
-  }, [chapterId]); // Re-run when chapterId changes
-
-  const paragraphs = [
-    { id: 1, content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-    { id: 2, content: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-    { id: 3, content: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo." },
-
-    // ... other paragraphs
-  ];
-
-  // Sample comments with paragraphId
-  const comments: (Comment & { paragraphId: number })[] = [
-    {
-      id: 1,
-      paragraphId: 1,
-      user: {
-        name: "John Doe",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "This is a great paragraph! I really enjoyed reading it.",
-      timestamp: "2 hours ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    {
-      id: 2,
-      paragraphId: 1,
-      user: {
-        name: "Jane Smith",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "The writing style is very engaging.",
-      timestamp: "1 hour ago"
-    },
-    
-    {
-      id: 3,
-      paragraphId: 2,
-      user: {
-        name: "Mike Johnson",
-        avatar: "https://i.pinimg.com/736x/51/da/29/51da291ac464f602dbae6bf8b9fff4c6.jpg"
-      },
-      content: "Interesting perspective!",
-      timestamp: "30 minutes ago"
-    }
-  ];
+  }, [chapterId]);
 
   // Function to get comment count for a paragraph
-  const getCommentCount = (paragraphId: number) => {
-    return comments.filter(comment => comment.paragraphId === paragraphId).length;
+  const getCommentCount = (paragraph: ChapterParagraph) => {
+    return paragraph.comments.length;
   };
 
   // Function to auto-resize textarea
@@ -185,10 +88,34 @@ const ChapterContent = () => {
 
   const handleComment = () => {
     if (commentText.trim()) {
-      // Handle comment submission here
+      // Since we're not using API, just clear the comment text
       setCommentText("");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-[130px] flex items-center justify-center">
+        <div className="text-xl text-gray-600">Loading chapter content...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-[130px] flex items-center justify-center">
+        <div className="text-xl text-red-600">{error}</div>
+      </div>
+    );
+  }
+
+  if (!chapterData) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-[130px] flex items-center justify-center">
+        <div className="text-xl text-gray-600">Chapter not found</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -232,26 +159,26 @@ const ChapterContent = () => {
             <div className="flex-1 bg-white rounded-lg shadow-sm p-6">
               {/* Chapter Stats */}
               <div className="bg-white border-b border-gray-200 p-4 mb-6">
-                <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Chapter Title</h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">{chapterData.title}</h1>
                 <div className="flex items-center justify-center gap-6 text-gray-600">
                   <div className="flex items-center gap-1">
                     <Eye className="w-5 h-5" />
-                    <span>1.2k</span>
+                    <span>{chapterData.views}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-5 h-5" />
-                    <span>245</span>
+                    <span>0</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <MessageSquare className="w-5 h-5" />
-                    <span>89 </span>
+                    <span>{chapterData.paragraphs.reduce((acc, p) => acc + p.comments.length, 0)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Chapter Content */}
-              <div className="bg-white p-4 ">
-                {paragraphs.map((paragraph) => (
+              <div className="bg-white p-4">
+                {chapterData.paragraphs.map((paragraph) => (
                   <div key={paragraph.id} className="group relative mb-4 select-none">
                     <p className="text-gray-700 leading-relaxed pr-8">
                       {paragraph.content}
@@ -259,18 +186,20 @@ const ChapterContent = () => {
                     <button 
                       onClick={() => setActiveCommentId(activeCommentId === paragraph.id ? null : paragraph.id)}
                       className={`hover:cursor-pointer absolute right-0 top-0 text-gray-500 ${
-                        getCommentCount(paragraph.id) === 0 ? 'hover:cursor-pointer opacity-0 group-hover:opacity-100' : ''
+                        getCommentCount(paragraph) === 0 ? 'hover:cursor-pointer opacity-0 group-hover:opacity-100' : ''
                       }`}
                     >
                       <div className="relative">
                         <MessageSquare className="w-5 h-5" />
-                        {getCommentCount(paragraph.id) > 0 && (
+                        {getCommentCount(paragraph) > 0 && (
                           <span className="absolute -top-2 -right-2 bg-gray-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                            {getCommentCount(paragraph.id)}
+                            {getCommentCount(paragraph)}
                           </span>
                         )}
                       </div>
                     </button>
+
+                  
                   </div>
                 ))}
                 <div className="flex justify-center mt-9 w-full">
@@ -287,10 +216,8 @@ const ChapterContent = () => {
                     Chương tiếp theo
                   </Link>
                 </div>
-              </div>
-            </div>
 
-            {/* Comments Modal with Overlay */}
+                {/* Comments Modal with Overlay */}
             {activeCommentId && (
               <>
                 {/* Overlay */}
@@ -316,7 +243,7 @@ const ChapterContent = () => {
                     {/* Selected Paragraph */}
                     <div className="p-4 bg-gray-100 select-none">
                       <p className="text-sm text-gray-600">
-                        {paragraphs.find(p => p.id === activeCommentId)?.content}
+                        {chapterData?.paragraphs.find((p: ChapterParagraph) => p.id === activeCommentId)?.content}
                       </p>
                     </div>
 
@@ -343,20 +270,20 @@ const ChapterContent = () => {
 
                     {/* Comments List */}
                     <div className="flex-1 overflow-y-auto p-4">
-                      {comments
-                        .filter(comment => comment.paragraphId === activeCommentId)
-                        .map((comment) => (
+                      {chapterData?.paragraphs
+                        .find(p => p.id === activeCommentId)
+                        ?.comments.map((comment) => (
                           <div key={comment.id} className="mb-4">
                             <div className="flex gap-2">
-                              <img 
-                                src={comment.user.avatar} 
-                                alt={comment.user.name}
-                                className="w-8 h-8 rounded-full"
-                              />
+                              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-600 text-sm">
+                                  {comment.userName.charAt(0).toUpperCase()}
+                                </span>
+                              </div>
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
-                                  <span className="font-medium text-gray-800 text-[14px]">{comment.user.name}</span>
-                                  <span className="text-sm text-gray-500 text-[12px]">{comment.timestamp}</span>
+                                  <span className="font-medium text-gray-800 text-[14px]">{comment.userName}</span>
+                                  <span className="text-sm text-gray-500 text-[12px]">{new Date(comment.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <p className="text-gray-700 mt-1 text-[14px]">{comment.content}</p>
                                 <div className="flex items-center gap-2 mt-1 text-gray-500 text-xs">
@@ -374,6 +301,8 @@ const ChapterContent = () => {
                 </div>
               </>
             )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
