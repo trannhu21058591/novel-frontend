@@ -202,10 +202,14 @@ const ChapterContent = () => {
                   
                   </div>
                 ))}
-                <div className="flex justify-center mt-9 w-full">
+                <div className="flex flex-col items-center mt-9 w-full gap-2">
                   <Link 
                     to={`/novel/${novelId}/chapter/${Number(chapterId) + 1}`}
-                    className="hover:cursor-pointer w-[50%] bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-200 text-center"
+                    className={`hover:cursor-pointer w-[50%] px-4 py-2 rounded-md transition-colors duration-200 text-center ${
+                      !chapterData || Number(chapterId) >= chapterData.paragraphs.length 
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none' 
+                        : 'bg-gray-700 text-white hover:bg-gray-500'
+                    }`}
                     onClick={() => {
                       window.scrollTo({
                         top: 0,
@@ -215,6 +219,9 @@ const ChapterContent = () => {
                   >
                     Chương tiếp theo
                   </Link>
+                  {(!chapterData || Number(chapterId) >= chapterData.paragraphs.length) && (
+                    <p className="text-gray-500 text-sm">Đây là chương cuối của tác phẩm</p>
+                  )}
                 </div>
 
                 {/* Comments Modal with Overlay */}
@@ -231,12 +238,12 @@ const ChapterContent = () => {
                   <div className="h-full flex flex-col">
                     {/* Header */}
                     <div className="p-4 flex justify-between items-center">
-                      <h3 className="font-semibold text-gray-800">Chapter 1</h3>
+                      <h3 className="font-semibold text-gray-800">{chapterData.title}</h3>
                       <button 
                         onClick={() => setActiveCommentId(null)}
                         className="text-gray-500 hover:text-gray-700"
                       >
-                        <X className="w-5 h-5" />
+                        <X className="w-5 h-5 hover:cursor-pointer" />
                       </button>
                     </div>
 
